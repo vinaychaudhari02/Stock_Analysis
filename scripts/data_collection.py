@@ -1,12 +1,20 @@
 import requests
 import pandas as pd
 
-def fetch_symbols(api_key, region='US'):
-    url = f'https://cloud.iexapis.com/stable/ref-data/region/{region}/symbols?token={api_key}'
+import requests
+from requests.exceptions import JSONDecodeError
+
+def fetch_symbols(api_key, region):
+    url = f"https://your-api-url.com?api_key={api_key}&region={region}"
     response = requests.get(url)
-    data = response.json()
-    symbols = [item['symbol'] for item in data]
-    return symbols
+
+    try:
+        data = response.json()
+    except JSONDecodeError:
+        print(f"Failed to decode JSON. Response was: {response.text}")
+        raise
+
+    return data
 
 def fetch_stock_data(symbol, api_key):
     url = f'https://cloud.iexapis.com/stable/stock/{symbol}/chart/max?token={api_key}'
